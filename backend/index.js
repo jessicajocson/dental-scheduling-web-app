@@ -5,13 +5,13 @@ const app = express();
 app.use(express.json());
 
 // Routes
-app.use('/api/home', require('./routes/homeRoutes'));
-app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api/booking', require('./routes/bookingRoutes'));
-app.use('/api/users', require('./routes/userRoutes'));
+app.use('/api/home', require('./routes/home.route'));
+app.use('/api/auth', require('./routes/auth.route'));
+app.use('/api/booking', require('./routes/booking.route'));
+app.use('/api/users', require('./routes/user.route'));
 
 // Error Handling
-app.use(require('./middlewares/errorHandler'));
+app.use(require('./middlewares/errorhandler'));
 
 // Server Start
 const PORT = process.env.PORT || 5000;

@@ -1,5 +1,5 @@
-const Dentist = require('../models/Dentist');
-const Appointment = require('../models/Appointment');
+const Dentist = require('../models/dentist.model');
+const Appointment = require('../models/appointment.model');
 
 exports.getDentists = async (req, res) => {
   try {
