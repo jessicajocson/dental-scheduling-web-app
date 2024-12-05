@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-  Box,
-  Button,
-  Checkbox,
-  FormControlLabel,
-  Link,
-  TextField,
-  Typography,
-} from '@mui/material';
-import '../../styles/login.css';
+import { Box, Button, Checkbox, FormControlLabel, Link, TextField, Typography } from '@mui/material';
 
 const LoginPage: React.FC = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -23,61 +14,57 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <>
-      
-      <Box className="login-container">
-      <Typography variant="h4" className='app-title'>
-        Dental Scheduling App
-      </Typography>
-        <Box
-          component="form"
-          onSubmit={handleSubmit}
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-          }}
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <Box
+        className="bg-white p-8 rounded-lg shadow-lg w-full sm:w-96"
+        component="form"
+        onSubmit={handleSubmit}
+      >
+        <Typography variant="h4" className="text-center font-semibold text-teal-600 mb-6">
+          Dental Office
+        </Typography>
+        <TextField
+          name="email"
+          label="Email"
+          type="email"
+          required
+          fullWidth
+          margin="normal"
+          variant="outlined"
+          className="mb-4"
+        />
+        <TextField
+          name="password"
+          label="Password"
+          type="password"
+          required
+          fullWidth
+          margin="normal"
+          variant="outlined"
+          className="mb-4"
+        />
+        <FormControlLabel
+          control={<Checkbox name="rememberMe" color="primary" />}
+          label="Remember Me"
+          className="mb-6"
+        />
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          fullWidth
+          className="py-2"
         >
-          <TextField
-            name="email"
-            label="Email"
-            type="email"
-            required
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            name="password"
-            label="Password"
-            type="password"
-            required
-            fullWidth
-            margin="normal"
-          />
-          <FormControlLabel
-            control={<Checkbox name="rememberMe" />}
-            label="Remember Me"
-          />
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            sx={{ marginTop: 2 }}
-          >
-            Log In
-          </Button>
-        </Box>
-
-        <Typography variant="body2" sx={{ marginTop: 2 }}>
-        Don't have an account?{' '}
-        <Link href="/signup" underline="hover">
-          Sign Up
-        </Link>
-      </Typography>
+          Log In
+        </Button>
+        <Typography variant="body2" className="text-center mt-4">
+          Don't have an account?{' '}
+          <Link href="/register" className="text-teal-600 hover:underline">
+            Sign Up
+          </Link>
+        </Typography>
       </Box>
-
-      
-    </>
+    </div>
   );
 };
 

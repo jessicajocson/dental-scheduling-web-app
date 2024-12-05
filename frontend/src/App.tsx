@@ -3,7 +3,7 @@ import Home from '../src/pages/home';
 import LoginPage from './pages/login';
 import Booking from '../src/pages/booking';
 import UserDashboard from '../src/pages/dashboard';
-import SignUpPage from './pages/signup';
+import SignUpPage from '../src/pages/register';
 
 function App() {
 
@@ -12,7 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<LoginPage/>}/>
-        <Route path="/signup" element={<SignUpPage/>}/>
+        <Route path="/register" element={<SignUpPage/>}/>
         <Route path="/booking" element={<Booking />} />
         <Route path="/user-dashboard" element={<UserDashboard />} />
       </Routes>
