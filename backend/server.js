@@ -6,13 +6,13 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-// // Enable CORS for all origins or just your specific frontend origin
-// app.use(cors({
-//     origin: 'http://localhost:5173',  // Frontend URL
-//     methods: ['GET', 'POST', 'PUT', 'DELETE'],  // Allow common methods
-//     allowedHeaders: ['Content-Type', 'Authorization'],  // Allow common headers
-//     credentials: true, // Allow cookies and credentials if needed
-// }));
+// Enable CORS for all origins or just your specific frontend origin
+app.use(cors({
+    origin: 'http://localhost:5173',  // Frontend URL
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],  // Allow common methods
+    allowedHeaders: ['Content-Type', 'Authorization'],  // Allow common headers
+    credentials: true, // Allow cookies and credentials if needed
+}));
 
 // A test route
 app.get('/booking/appointments', (req, res) => {
