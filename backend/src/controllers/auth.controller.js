@@ -1,35 +1,31 @@
-const User = require('../models/user.model.js');
-const jwt = require('jsonwebtoken');
+const AuthService = require("../services/auth.service");
 
-exports.register = async (req, res) => {
-  try {
-    const user = await User.create(req.body);
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-    res.status(201).json({ success: true, token });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-};
-
-exports.login = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
-    if (!user || !(await user.comparePassword(password))) {
-      return res.status(401).json({ success: false, message: "Invalid credentials" });
+class AuthController {
+  static async login(req, res) {
+    try {
+      const { email, password } = req.body;
+      const result = await AuthService.login(email, password);
+      res.json(result);
+    } catch (error) {
+      res.status(401).json({ error: error.message });
     }
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-    res.status(200).json({ success: true, token });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
   }
-};
 
-exports.getProfile = async (req, res) => {
-  try {
-    const user = await User.findById(req.user.id);
-    res.status(200).json({ success: true, data: user });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+  static async register(req, res) {
+    try {
+      console.log(req.body);
+      const { full_name, phone, email, password } = req.body;
+      const result = await AuthService.register(
+        full_name,
+        phone,
+        email,
+        password
+      );
+      res.status(201).json(result);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
   }
-};
+}
+
+module.exports = AuthController;

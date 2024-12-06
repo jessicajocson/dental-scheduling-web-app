@@ -1,10 +1,25 @@
-const express = require('express');
-const { getUserAppointments, updateAppointment, cancelAppointment } = require('../controllers/user.controller');
-const authMiddleware = require('../middlewares/authMiddleware');
+const express = require("express");
+const UserController = require("../controllers/user.controller");
+const AuthService = require("../services/auth.service");
+
 const router = express.Router();
 
-router.get('/:userId/appointments', authMiddleware, getUserAppointments);
-router.put('/appointments/:appointmentId', authMiddleware, updateAppointment);
-router.delete('/appointments/:appointmentId', authMiddleware, cancelAppointment);
+router.get(
+  "/appointments",
+  AuthService.authenticateToken,
+  UserController.getUserAppointments
+);
+router.put(
+  "/appointments/:id",
+  AuthService.authenticateToken,
+  UserController.updateAppointment
+);
+
+router.delete(
+  "/appointments/:id",
+  AuthService.authenticateToken,
+  UserController.deleteAppointment
+);
 
 module.exports = router;
+

@@ -1,11 +1,15 @@
-const db = require('../db');
+const db = require("../config/database");
 
-const Service = {
-    getAll: async () => {
-        const query = `SELECT * FROM services;`;
-        const result = await db.query(query);
-        return result.rows;
-    },
-};
+class Service {
+  static async findAll() {
+    return new Promise((resolve, reject) => {
+      db.query("SELECT * FROM services", (err, results) => {
+        if (err) reject(err);
+        resolve(results);
+      });
+    });
+  }
+}
 
 module.exports = Service;
+

@@ -1,34 +1,87 @@
-const db = require('../db');
+const { response } = require("express");
+const db = require("../config/database");
 
-const Appointment = {
-    create: async (userId, dentistId, serviceId, appointmentDate, appointmentTime) => {
-        const query = `
-            INSERT INTO appointments (user_id, dentist_id, service_id, appointment_date, appointment_time)
-            VALUES ($1, $2, $3, $4, $5)
-            RETURNING *;
-        `;
-        const values = [userId, dentistId, serviceId, appointmentDate, appointmentTime];
-        const result = await db.query(query, values);
-        return result.rows[0];
-    },
+class Appointment {
+  static async findAll(dentist_fullname, appointment_date, appointment_time) {
+    return new Promise((resolve, reject) => {
+      db.query(
+        `SELECT Appointment.*, Schedule.schedule_time AS schedule_time, Schedule.schedule_day AS schedule_day, Dentist.full_name AS dentist_name, Service.name AS service_name, Service.value AS service_value
+         FROM Appointment
+         JOIN Schedule ON Appointment.schedule_id = Schedule.id
+         JOIN Dentist ON Schedule.dentist_id = Dentist.id
+         JOIN Service ON Appointment.service_id = Service.id
+         WHERE Appointment.status <> 'Cancelled'
+         AND Dentist.full_name = ?
+         AND DATE(Appointment.appointment_date) = DATE(?)`,
+        [doctor_fullname, appointment_date],
+        (err, results) => {
+          if (err) reject(err);
+          resolve(results);
+        }
+      );
+    });
+  }
 
-    getByUserId: async (userId) => {
-        const query = `
-            SELECT a.*, d.name AS dentist_name, s.name AS service_name
-            FROM appointments a
-            JOIN dentists d ON a.dentist_id = d.id
-            JOIN services s ON a.service_id = s.id
-            WHERE a.user_id = $1;
-        `;
-        const result = await db.query(query, [userId]);
-        return result.rows;
-    },
+  static async create(appointment) {
+    return new Promise((resolve, reject) => {
+      db.query(
+        `INSERT INTO Appointment (schedule_id, client_id, service_id, appointment_date, status)
+        VALUES (?, ?, ?, ?, ?, ?)`,
+        appointment,
+        (err, result) => {
+          if (err) reject(err);
+          resolve(result);
+        }
+      );
+    });
+  }
 
-    cancel: async (id) => {
-        const query = `DELETE FROM appointments WHERE id = $1 RETURNING *;`;
-        const result = await db.query(query, [id]);
-        return result.rows[0];
-    },
-};
+  static async findByClient(client_id) {
+    return new Promise((resolve, reject) => {
+      db.query(
+        `SELECT Appointment.id AS appointment_id,
+                Appointment.appointment_date,
+                Service.name AS service_name,
+                Dentist.full_name AS dentist_name,
+                Appointment.status,
+                Appointment.remarks
+        FROM Appointment
+        JOIN Client ON Appointment.Client_id = Client.id
+        JOIN Schedule ON Appointment.Schedule_id = Schedule.id
+        JOIN Dentist ON Schedule.Dentist_id = Dentist.id
+        JOIN Service ON Appointment.Service_id = Service.id
+        WHERE Client.id = ?`,
+        [client_id],
+        (err, results) => {
+          if (err) reject(err);
+          console.log("results", results);
+          resolve(results);
+        }
+      );
+    });
+  }
+
+  static async update(id, data) {
+    return new Promise((resolve, reject) => {
+      db.query(
+        "UPDATE Appointment SET ? WHERE id = ?",
+        [data, id],
+        (err, result) => {
+          if (err) reject(err);
+          resolve(result);
+        }
+      );
+    });
+  }
+
+  static async deleteById(id) {
+    return new Promise((resolve, reject) => {
+      db.query("DELETE FROM Appointment WHERE id = ?", [id], (err, result) => {
+        if (err) reject(err);
+        resolve(result);
+      });
+    });
+  }
+}
 
 module.exports = Appointment;

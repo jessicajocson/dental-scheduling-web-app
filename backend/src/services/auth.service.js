@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken");
 const Client = require("../models/client.model");
 
 class AuthService {
-  // services/authService.js
   static async login(email, password) {
     const user = await Client.findByEmail(email);
     if (!user) {
@@ -31,6 +30,8 @@ class AuthService {
       expiresIn: "1h",
     });
     client["id"] = user.insertId;
+    console.log('JWT Secret:', process.env.JWT_SECRET);
+
     return { message: "User registered successfully", token, user: client };
   }
 

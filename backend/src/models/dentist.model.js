@@ -1,11 +1,15 @@
-const db = require('../db');
+const db = require("../config/db");
 
-const Dentist = {
-    getAll: async () => {
-        const query = `SELECT * FROM dentists;`;
-        const result = await db.query(query);
-        return result.rows;
-    },
-};
+class Dentist{
+  static async findAll() {
+    return new Promise((resolve, reject) => {
+      db.query("SELECT * FROM dentists", (err, results) => {
+        if (err) reject(err);
+        resolve(results);
+      });
+    });
+  }
+}
 
 module.exports = Dentist;
+
