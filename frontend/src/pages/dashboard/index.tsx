@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { Button, Menu, MenuItem, Modal, Box, TextField } from '@mui/material';
+import { Button, Menu, MenuItem, Modal, Box} from '@mui/material';
 import Navbar from '../../components/navbar';
+import { useDashboard } from './hooks/useDashboard';
 
 // Sample appointment data
 const appointments = [
@@ -11,6 +12,8 @@ const appointments = [
 ];
 
 const AppointmentTable = () => {
+  const { ...hooks } = useDashboard();
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [openModal, setOpenModal] = useState(false);
   const [selectedAction, setSelectedAction] = useState('');
@@ -25,22 +28,26 @@ const AppointmentTable = () => {
     setAnchorEl(null);
   };
 
-  const handleActionSelect = (action: string) => {
-    setSelectedAction(action);
-    setOpenModal(true);
-    handleMenuClose();
-  };
+  // const handleActionSelect = (action: string) => {
+  //   setSelectedAction(action);
+  //   setOpenModal(true);
+  //   handleMenuClose();
+  // };
 
-  const handleModalClose = () => {
-    setOpenModal(false);
-    setSelectedAction('');
-  };
+  // const handleModalClose = () => {
+  //   setOpenModal(false);
+  //   setSelectedAction('');
+  // };
 
-  const handleConfirmAction = () => {
-    // Handle reschedule or cancel logic
-    alert(`${selectedAction} for appointment with ${selectedAppointment.dentist} confirmed!`);
-    handleModalClose();
-  };
+  const handleConfirmAction = async () => {
+    if (selectedAction === "Update") {
+        // Logic for updating the appointment
+        alert(`Appointment with ${selectedAppointment.dentist} updated!`);
+    } else if (selectedAction === "Cancel") {
+        await hooks.handleActionSelect('Delete');
+    }
+    hooks.handleModalClose();
+};
 
   const columns = [
     { field: 'date', headerName: 'Date', width: 150 },
@@ -93,7 +100,7 @@ const AppointmentTable = () => {
         <h3 className="text-3xl font-semibold mb-4">Appointments</h3>
         <div style={{ height: 400, width: '100%' }}>
           <DataGrid
-            rows={appointments}
+            rows={hooks.storedAppointments}
             columns={columns}
             initialState={{
               pagination: {
@@ -102,7 +109,7 @@ const AppointmentTable = () => {
                 },
               },
             }}
-            disableRowSelectionOnClick
+            onCellClick={hooks.handleSelectedAppointment}
             getRowClassName={getRowClassName}
           />
         </div>
@@ -113,14 +120,14 @@ const AppointmentTable = () => {
           open={Boolean(anchorEl)}
           onClose={handleMenuClose}
         >
-          <MenuItem onClick={() => handleActionSelect('Reschedule')}>Reschedule</MenuItem>
-          <MenuItem onClick={() => handleActionSelect('Cancel')}>Cancel</MenuItem>
+          <MenuItem onClick={() => hooks.handleActionSelect('Reschedule')}>Update</MenuItem>
+          <MenuItem onClick={() => hooks.handleActionSelect('Cancel')}>Cancel</MenuItem>
         </Menu>
 
         {/* Confirmation Modal */}
         <Modal
-          open={openModal}
-          onClose={handleModalClose}
+          open={hooks.isModalOpen}
+          onClose={hooks.handleModalClose}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
@@ -141,7 +148,7 @@ const AppointmentTable = () => {
               Are you sure you want to {selectedAction.toLowerCase()} your appointment with {selectedAppointment?.dentist} on {selectedAppointment?.date} at {selectedAppointment?.time}?
             </p>
             <div className="flex justify-end mt-4">
-              <Button onClick={handleModalClose} color="secondary" variant="outlined">
+              <Button onClick={hooks.handleModalClose} color="secondary" variant="outlined">
                 Cancel
               </Button>
               <Button

@@ -1,24 +1,16 @@
 import React from 'react';
 import { Box, Button, Checkbox, FormControlLabel, Link, TextField, Typography } from '@mui/material';
+import { useLogin } from './hooks/useLogin';
 
 const LoginPage: React.FC = () => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const email = formData.get('email') as string;
-    const password = formData.get('password') as string;
-    const rememberMe = formData.get('rememberMe') === 'on';
-
-    console.log({ email, password, rememberMe });
-    // Add login logic here
-  };
-
+  const { ...hooks } = useLogin();
+  
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <Box
         className="bg-white p-8 rounded-lg shadow-lg w-full sm:w-96"
         component="form"
-        onSubmit={handleSubmit}
+        onSubmit={hooks.handleClickLogin}
       >
         <Typography variant="h4" className="text-center font-semibold text-teal-600 mb-6">
           Dental Office
@@ -49,6 +41,7 @@ const LoginPage: React.FC = () => {
           className="mb-6"
         />
         <Button
+          href="/"
           type="submit"
           variant="contained"
           color="primary"

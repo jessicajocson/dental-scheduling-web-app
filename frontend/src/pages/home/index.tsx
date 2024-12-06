@@ -1,12 +1,12 @@
-import { useNavigate } from 'react-router-dom';
 import PhoneIcon from '@mui/icons-material/Phone';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import CoverPhoto from '/homepage-cover-photo.png';
 import Navbar from '../../components/navbar';
 import Services from '../../components/home-services';
+import { useHome } from "./hooks/useHome";
 
 const Home = () => {
-    const navigate = useNavigate();
+    const { ...hooks } = useHome();
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -31,7 +31,7 @@ const Home = () => {
                         <div className="w-full h-96 relative">
                             <img src={CoverPhoto} alt="Dental Model" className="w-full h-full object-cover" />
                             <button className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-teal-400 text-white px-4 py-2 rounded-md"
-                                onClick={() => navigate('/booking')}>
+                                onClick={() => hooks.handleClickBookAppointment}>
                                 Book an Appointment
                             </button>
                         </div>

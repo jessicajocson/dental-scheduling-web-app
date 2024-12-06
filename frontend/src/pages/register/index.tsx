@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Alert,
   Box,
   Button,
   Checkbox,
@@ -8,22 +9,10 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { useRegister } from './hooks/useRegister';
 
 const SignUpPage: React.FC = () => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const firstname = formData.get('firstname') as string;
-    const lastname = formData.get('lastname') as string;
-    const mobileNumber = formData.get('mobileNumber') as string;
-    const email = formData.get('email') as string;
-    const password = formData.get('password') as string;
-    const confirmPassword = formData.get('confirmPassword') as string;
-    const rememberMe = formData.get('rememberMe') === 'on';
-
-    // console.log({ email, password, rememberMe });
-    // Add login logic here
-  };
+  const { ...hooks } = useRegister();
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -33,45 +22,47 @@ const SignUpPage: React.FC = () => {
         </Typography>
 
         <Box
-          component="form"
-          onSubmit={handleSubmit}
           className="space-y-4"
         >
+          {hooks.errorMessage.length !== 0 ? (
+            <Alert severity="error">{hooks.errorMessage}</Alert>
+          ) : (
+            <></>
+          )}
+
           <TextField
-            name="firstname"
-            label="First Name"
-            type="string"
+            name="fullname"
+            label="Full Name"
+            placeholder="John Doe"
             required
             fullWidth
             margin="normal"
             className="border-2 border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-300 rounded-lg"
-          />
-          <TextField
-            name="lastname"
-            label="Last Name"
-            type="string"
-            required
-            fullWidth
-            margin="normal"
-            className="border-2 border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-300 rounded-lg"
+            onChange={hooks.handleChangeInputFullName}
+            error={hooks.userFullName.length === 0}
           />
           <TextField
             name="mobile"
             label="Mobile Number"
-            type="tel"
+            placeholder='01234567890'
             required
             fullWidth
             margin="normal"
             className="border-2 border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-300 rounded-lg"
+            onChange={hooks.handleChangeInputPhone}
+            error={hooks.phone.length === 0}
           />
           <TextField
             name="email"
             label="Email"
-            type="email"
+            placeholder="johndoe@email.com"
             required
             fullWidth
             margin="normal"
             className="border-2 border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-300 rounded-lg"
+            onChange={hooks.handleChangeInputEmail}
+            error={!hooks.EmailRegex.test(hooks.email)}
+
           />
           <TextField
             name="password"
@@ -81,16 +72,10 @@ const SignUpPage: React.FC = () => {
             fullWidth
             margin="normal"
             className="border-2 border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-300 rounded-lg"
+            onChange={hooks.handleChangeInputPassword}
+            error={hooks.password.length === 0}
           />
-          <TextField
-            name="confirmPassword"
-            label="Confirm Password"
-            type="password"
-            required
-            fullWidth
-            margin="normal"
-            className="border-2 border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-300 rounded-lg"
-          />
+
           <FormControlLabel
             control={<Checkbox name="rememberMe" />}
             label="Remember Me"
@@ -103,6 +88,8 @@ const SignUpPage: React.FC = () => {
             color="primary"
             fullWidth
             className="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-4 rounded-lg"
+            disabled={!hooks.hasCompleteValidInput}
+            onClick={hooks.handleClickSignUp}
           >
             Sign Up
           </Button>

@@ -12,6 +12,8 @@ import {
   Alert,
 } from '@mui/material';
 import Navbar from '../../components/navbar';
+import { useBookAppointment } from './hooks/useBooking';
+import { IAppointmentList } from '../../interfaces/booking.response';
 
 interface Dentist {
   id: string;
@@ -25,6 +27,8 @@ interface Slot {
 }
 
 const Booking = () => {
+  const { ...hooks } = useBookAppointment();
+
   const [dentists, setDentists] = useState<Dentist[]>([]);
   const [services, setServices] = useState<string[]>([]);
   const [selectedService, setSelectedService] = useState<string>('');
@@ -45,60 +49,60 @@ const Booking = () => {
     ]);
   }, []);
 
-  const handleServiceChange = (service: string) => {
-    setSelectedService(service);
-    setSelectedDentist('');
-    setAvailableSlots([]);
-  };
+  // const handleServiceChange = (service: string) => {
+  //   setSelectedService(service);
+  //   setSelectedDentist('');
+  //   setAvailableSlots([]);
+  // };
 
-  const handleDentistChange = (id: string) => {
-    setSelectedDentist(id);
-    setAvailableSlots([
-      { time: '10:00 AM', isAvailable: true },
-      { time: '11:00 AM', isAvailable: true },
-      { time: '1:00 PM', isAvailable: true },
-      { time: '3:00 PM', isAvailable: true },
-    ]);
-  };
+  // const handleDentistChange = (id: string) => {
+  //   setSelectedDentist(id);
+  //   setAvailableSlots([
+  //     { time: '10:00 AM', isAvailable: true },
+  //     { time: '11:00 AM', isAvailable: true },
+  //     { time: '1:00 PM', isAvailable: true },
+  //     { time: '3:00 PM', isAvailable: true },
+  //   ]);
+  // };
 
-  const handleSubmit = async () => {
-    if (!selectedDentist || !selectedDate || !selectedSlot) {
-      setError('Please select a dentist, a date, and a time slot.');
-      return;
-    }
+  // const handleSubmit = async () => {
+  //   if (!selectedDentist || !selectedDate || !selectedSlot) {
+  //     setError('Please select a dentist, a date, and a time slot.');
+  //     return;
+  //   }
 
-    setError(null);
-    setIsLoading(true);
+  //   setError(null);
+  //   setIsLoading(true);
 
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log('Appointment booked successfully');
-      setSnackbarOpen(true);
-    } catch (err) {
-      console.error('Error booking appointment:', err);
-      setError('Failed to book appointment. Please try again.');
-    } finally {
-      setIsLoading(false);
-      setIsModalOpen(false);
-    }
-  };
+  //   try {
+  //     await new Promise((resolve) => setTimeout(resolve, 1000));
+  //     console.log('Appointment booked successfully');
+  //     setSnackbarOpen(true);
+  //   } catch (err) {
+  //     console.error('Error booking appointment:', err);
+  //     setError('Failed to book appointment. Please try again.');
+  //   } finally {
+  //     setIsLoading(false);
+  //     setIsModalOpen(false);
+  //   }
+  // };
 
-  const handleModalOpen = () => {
-    if (!selectedDate || !selectedSlot) {
-      setError('Please select a date and a time slot.');
-      return;
-    }
-    setError(null);
-    setIsModalOpen(true);
-  };
+  // const handleModalOpen = () => {
+  //   if (!selectedDate || !selectedSlot) {
+  //     setError('Please select a date and a time slot.');
+  //     return;
+  //   }
+  //   setError(null);
+  //   setIsModalOpen(true);
+  // };
 
-  const handleModalClose = () => {
-    setIsModalOpen(false);
-  };
+  // const handleModalClose = () => {
+  //   setIsModalOpen(false);
+  // };
 
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
-  };
+  // const handleSnackbarClose = () => {
+  //   setSnackbarOpen(false);
+  // };
 
   return (
     <>
@@ -116,7 +120,7 @@ const Booking = () => {
                 {services.map((service) => (
                   <button
                     key={service}
-                    onClick={() => handleServiceChange(service)}
+                    onClick={() => hooks.handleChangeService}
                     className={`px-6 py-2 rounded border ${selectedService === service ? 'border-teal-600 bg-teal-600 text-white' : 'border-gray-300 bg-white text-black'}`}
                   >
                     {service}
@@ -130,7 +134,7 @@ const Booking = () => {
               <>
                 <h3 className="mt-4">Select Dentist:</h3>
                 <select
-                  onChange={(e) => handleDentistChange(e.target.value)}
+                  onChange={(e) => hooks.handleClickDoctor(e.target.value)}
                   value={selectedDentist}
                   className="w-full bg-white border border-gray-300 rounded-lg p-3 mt-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
                 >
@@ -176,7 +180,7 @@ const Booking = () => {
                   {/* Submit Button */}
             {selectedSlot && (
               <button
-                onClick={handleModalOpen}
+                onClick={hooks.handleModalOpen}
                 disabled={isLoading}
                 className="absolute mb-4 bottom-3 right-13 px-6 py-3 bg-teal-500 text-white rounded-lg border-none focus:outline-none hover:bg-teal-600"
               >
@@ -194,8 +198,8 @@ const Booking = () => {
 
             {/* Confirmation Modal */}
             <Modal
-              open={isModalOpen}
-              onClose={handleModalClose}
+              open={hooks.isModalOpen}
+              onClose={hooks.handleModalClose}
               aria-labelledby="confirmation-modal"
               aria-describedby="confirm-booking-details"
             >
@@ -223,10 +227,10 @@ const Booking = () => {
                   {`Time: ${selectedSlot}`}
                 </Typography>
                 <div className="flex justify-between mt-6">
-                  <Button variant="contained" color="success" onClick={handleSubmit}>
+                  <Button variant="contained" color="success" onClick={hooks.handleClickConfirm}>
                     Confirm
                   </Button>
-                  <Button variant="outlined" color="error" onClick={handleModalClose}>
+                  <Button variant="outlined" color="error" onClick={hooks.handleModalClose}>
                     Cancel
                   </Button>
                 </div>
@@ -236,10 +240,10 @@ const Booking = () => {
             <Snackbar
               open={snackbarOpen}
               autoHideDuration={3000}
-              onClose={handleSnackbarClose}
+              onClose={hooks.handleSnackbarClose}
               anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
             >
-              <Alert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
+              <Alert onClose={hooks.handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
                 Appointment booked successfully!
               </Alert>
             </Snackbar>
