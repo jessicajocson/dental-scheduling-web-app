@@ -4,17 +4,25 @@ import { useLogin } from './hooks/useLogin';
 
 const LoginPage: React.FC = () => {
   const { ...hooks } = useLogin();
-  
+
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="linear-gradient flex flex-col items-center justify-center min-h-screen bg-gray-100">
+
+      <img
+        src="../../public/dental-logo.png" // Replace with the path to your logo
+        alt="Logo"
+        className="mb-2 w-24 h-auto" // Adjust size and spacing
+      />
+
       <Box
-        className="bg-white p-8 rounded-lg shadow-lg w-full sm:w-96"
+        className="bg-white p-8 rounded-2xl shadow-lg w-full mt-6 sm:w-96"
         component="form"
         onSubmit={hooks.handleClickLogin}
       >
-        <Typography variant="h4" className="text-center font-semibold text-teal-600 mb-6">
-          Dental Office
+        <Typography variant="h4" className="text-center font-bold text-[#7895F7] mb-6">
+          Log In
         </Typography>
+
         <TextField
           name="email"
           label="Email"
@@ -44,13 +52,20 @@ const LoginPage: React.FC = () => {
           href="/"
           type="submit"
           variant="contained"
-          color="primary"
           fullWidth
-          className="py-2"
+          sx={{
+            backgroundColor: "#7895F7",
+            color: "#FFF",
+            "&:hover": {
+              backgroundColor: "#A0B1F9",
+              color: "#FFF",
+            },
+          }}
         >
           Log In
         </Button>
-        <Typography variant="body2" className="text-center mt-4">
+
+        <Typography variant="body2" className="text-center mt-4 py-2">
           Don't have an account?{' '}
           <Link href="/register" className="text-teal-600 hover:underline">
             Sign Up

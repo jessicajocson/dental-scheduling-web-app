@@ -19,6 +19,22 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.linear-gradient {
+  background: linear-gradient(0deg, #FFF2F9 0%, #C4D7F9 100%);
+}
+
+.box-gradient-1 {
+  background: linear-gradient(45deg, #d4defb90 60%, #EEEEEE 100%);
+}
+
+.box-gradient-2 {
+  background: linear-gradient(180deg, #d4defb90 60%, #EEEEEE 100%);
+}
+
+.box-gradient-3 {
+  background: linear-gradient(35deg, #d4defb90 60%, #EEEEEE 100%);
+}
+
 a {
   font-weight: 500;
   color: #646cff;

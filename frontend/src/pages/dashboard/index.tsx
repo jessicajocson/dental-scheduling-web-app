@@ -95,7 +95,7 @@ const AppointmentTable = () => {
   return (
     <>
     <Navbar/>
-    <div className="flex justify-center bg-teal-100 min-h-screen">
+    <div className="linear-gradient flex justify-center min-h-screen">
       <div className="max-w-5xl w-full bg-white p-6 relative">
         <h3 className="text-3xl font-semibold mb-4">Appointments</h3>
         <div style={{ height: 400, width: '100%' }}>
