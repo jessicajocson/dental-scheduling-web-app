@@ -1,7 +1,7 @@
 # Dental Office Online Scheduling System
 
 ## Demo Video
-
+[![Dental Office Online Scheduling System Video Demo](https://github.com/jessicajocson/dental-scheduling-web-app/blob/main/web-app.jpeg)]
 
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) ![Tailwind](https://img.shields.io/badge/-Tailwind_CSS-black?style=for-the-badge&logoColor=white&logo=tailwindcss&color=06B6D4) ![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white) ![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white) ![AWSRds](https://img.shields.io/badge/AWS_RDS-MySQL-FF9900?style=for-the-badge&logo=mysql&logoColor=white) 
 
@@ -17,7 +17,6 @@ This web application allows dental patients to schedule and manage their dental 
 3. [Database Schema](#database-schema)
 4. [Features](#features)
 5. [Setup and Installation](#setup-and-installation)
-6. [Deployment] (#deployment)
 
 ## Folder Structure
 
