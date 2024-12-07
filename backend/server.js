@@ -6,13 +6,13 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-// Enable CORS for all origins or just your specific frontend origin
 app.use(cors({
-    origin: 'http://localhost:5173',  // Frontend URL
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],  // Allow common methods
-    allowedHeaders: ['Content-Type', 'Authorization'],  // Allow common headers
-    credentials: true, // Allow cookies and credentials if needed
-}));
+    origin: 'http://localhost:5173', // use your actual domain name (or localhost), using * is not recommended
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Origin', 'X-Requested-With', 'Accept', 'x-client-key', 'x-client-token', 'x-client-secret', 'Authorization'],
+    credentials: true
+}))
+
 
 // A test route
 app.get('/booking/appointments', (req, res) => {
@@ -24,10 +24,10 @@ app.post('/booking/appointments', (req, res) => {
 });
 
 
-const authRoutes = require("./src/routes/auth.route");
-const bookingRoutes = require("./src/routes/booking.route");
-// const homeRoutes = require("./src/routes/home.route");
-const userRoutes = require("./src/routes/user.route");
+const authRoutes = require("./routes/auth.route");
+const bookingRoutes = require("./routes/booking.route");
+const homeRoutes = require("./routes/home.route");
+const userRoutes = require("./routes/user.route");
 
 
 
@@ -39,13 +39,13 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use("/auth", authRoutes);
+app.use("/auth", authRoutes)
 app.use("/booking", bookingRoutes);
-// app.use("/home", homeRoutes);
+app.use("/home", homeRoutes);
 app.use("/user", userRoutes);
 
 // Error Handling
-app.use(require('./src/middleware/errorhandler'));
+app.use(require('./middleware/errorhandler'));
 
 // Server Start
 const PORT = process.env.PORT || 3000;
